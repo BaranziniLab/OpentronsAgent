@@ -4,7 +4,7 @@
   "service_title": "Opentrons shared data",
   "kind": "adapter",
   "log_level_env": "OPENTRONS_LOG_LEVEL",
-  "instructions": "OpentronsAgent 0.2.0 reads Opentrons shared data (labware, pipette, deck and module definitions) from the Opentrons repository on GitHub: target shared_data for raw JSON files, target github for directory listings (query ref=edge or a release tag). It does not talk to a robot: the robot HTTP API is plain http on your network, which this extension does not use.",
+  "instructions": "OpentronsAgent simulates protocols written with the Opentrons Python API: opentrons_simulate returns the run log and any error, and Biorouter asks the person before each run because it executes the protocol's Python here. Opentrons 10 simulates Flex protocols only. The protocol may import only opentrons and a few standard modules; file, network and system access are refused, and a run stops after 60 seconds. opentrons_labware_search and opentrons_labware_definition read the standard labware that ships with the package (no network). opentrons_get reads Opentrons shared data on GitHub. The extension never talks to a robot.",
   "targets": [
     {
       "name": "shared_data",

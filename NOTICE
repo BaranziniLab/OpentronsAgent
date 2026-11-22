@@ -5,3 +5,9 @@ Licensed under the Apache License, Version 2.0.
 
 Built with the Biorouter BRXT adapter kit 1.0.1 (Apache-2.0), whose
 files are vendored under src/opentronsagent/_kit/ and tests/kit_testing/.
+
+Third-party software installed with this extension (not bundled; uv installs it from PyPI):
+- opentrons 10.1.0 and opentrons-shared-data 10.1.0, Apache-2.0, Copyright Opentrons Labworks Inc.
+  https://github.com/Opentrons/opentrons
+opentrons 10.1.0 declares jsonschema<4.18, which conflicts with the MCP SDK; pyproject.toml overrides it to
+jsonschema>=4.20,<5, and the simulation tests run against that version.

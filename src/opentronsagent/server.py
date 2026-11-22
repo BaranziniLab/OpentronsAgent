@@ -29,7 +29,10 @@ def load_spec() -> AdapterSpec:
 
 
 def register_extra_tools(mcp: FastMCP, spec: AdapterSpec) -> None:
-    """Typed tools for this service. None by default."""
+    """Typed tools for this service."""
+    from opentronsagent import opentrons_tools
+
+    opentrons_tools.register(mcp)
 
 
 def create_server() -> FastMCP:

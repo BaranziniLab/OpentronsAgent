@@ -1,10 +1,10 @@
 # OpentronsAgent
 
-Read Opentrons labware, pipette, deck and module definitions from Opentrons shared data. Robot calls and the local command runner are removed; no key needed.
+Simulate Opentrons Flex protocols with the opentrons package and look up the labware definitions it ships, plus Opentrons shared data on GitHub. Biorouter asks before each simulation, which runs the protocol's Python. No key needed.
 
-Current version: **0.2.0**
+Current version: **0.3.0**
 
-This release removes the 0.1.0 robot calls (the robot API is plain `http` on the lab network, which the adapter kit does not allow, and the 0.1.0 default `localhost:31950` is not where a robot listens), the optional token and the local command runner. It reads Opentrons shared data from GitHub. Protocol simulation arrives in 0.3.0.
+This release adds typed tools on `opentrons` 10.1.0 (Apache-2.0): `opentrons_simulate` (not read only: it runs the protocol's Python in this process after a static check, with a 60 second and 2 million line limit and its output captured; Biorouter asks before each run), `opentrons_labware_search` and `opentrons_labware_definition`. opentrons 10 simulates Flex protocols only. opentrons declares `jsonschema<4.18`, which the MCP SDK cannot use, so `pyproject.toml` overrides it to `jsonschema>=4.20,<5`; the simulation tests run on that version.
 
 This is a Biorouter extension (a `.brxt` bundle) built on the BRXT adapter kit
 1.0.1. Install it from BAAM in Biorouter, or from a file:
@@ -29,6 +29,7 @@ biorouter extension install dist/opentronsagent.brxt
 
 | Variable | Required | Secret | Purpose |
 | --- | --- | --- | --- |
+| `OPENTRONS_DATA_DIR` | no | no | Optional folder for the simulator's configuration and temporary custom labware. Default: a folder beside Biorouter's data. |
 | `OPENTRONS_LOG_LEVEL` | no | no | Logging level |
 
 ## How it protects your credentials

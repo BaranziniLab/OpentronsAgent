@@ -1,13 +1,20 @@
 {
   "name": "opentronsagent",
   "display_name": "OpentronsAgent",
-  "description": "Read Opentrons labware, pipette, deck and module definitions from Opentrons shared data. Robot calls and the local command runner are removed; no key needed.",
-  "version": "0.2.0",
+  "description": "Simulate Opentrons Flex protocols with the opentrons package and look up the labware definitions it ships, plus Opentrons shared data on GitHub. Biorouter asks before each simulation, which runs the protocol's Python. No key needed.",
+  "version": "0.3.0",
   "entry_point": "opentronsagent",
   "repository": "https://github.com/BaranziniLab/OpentronsAgent",
   "license": "Apache-2.0",
-  "tools_count": 2,
+  "tools_count": 5,
   "env_vars": [
+    {
+      "key": "OPENTRONS_DATA_DIR",
+      "required": false,
+      "auto_propagate": true,
+      "description": "Optional folder for the simulator's configuration and temporary custom labware. Default: a folder beside Biorouter's data.",
+      "secret": false
+    },
     {
       "key": "OPENTRONS_LOG_LEVEL",
       "required": false,
@@ -20,7 +27,7 @@
   "skills": [
     {
       "name": "opentrons-lab-automation",
-      "description": "How to call OpentronsAgent's tools to read Opentrons labware, pipette and deck definitions."
+      "description": "How to call OpentronsAgent's tools: simulate Opentrons Flex protocols, look up labware definitions, and read Opentrons shared data on GitHub."
     }
   ]
 }
