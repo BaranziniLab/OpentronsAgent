@@ -1,15 +1,62 @@
 # OpentronsAgent
 
-BioRouter BRXT extension for Opentrons lab automation workflows.
+Read Opentrons labware, pipette, deck and module definitions from Opentrons shared data. Robot calls and the local command runner are removed; no key needed.
 
-## What it provides
-- MCP tools for status, target discovery, guarded API calls, guarded local command planning/execution, and JSON resource summarization.
-- Read-first behavior: mutation-capable HTTP methods require `allow_mutation=true`.
-- Local command execution is allowlisted and requires `allow_execute=true`.
-- Bundled BioRouter skill: `opentrons-lab-automation`.
+Current version: **0.2.0**
 
-## Install
-Download `opentronsagent.brxt` from the release page and install it through BioRouter Extensions.
+This release removes the 0.1.0 robot calls (the robot API is plain `http` on the lab network, which the adapter kit does not allow, and the 0.1.0 default `localhost:31950` is not where a robot listens), the optional token and the local command runner. It reads Opentrons shared data from GitHub. Protocol simulation arrives in 0.3.0.
+
+This is a Biorouter extension (a `.brxt` bundle) built on the BRXT adapter kit
+1.0.1. Install it from BAAM in Biorouter, or from a file:
+
+```bash
+biorouter extension install dist/opentronsagent.brxt
+```
+
+## Tools
+
+- `opentrons_status`: shows which targets are configured, their routes and which settings are present. It never shows a value and makes no network call.
+- `opentrons_get`: reads from a target. It sends `GET`, or `POST` on routes declared as reads, and is marked read only, so Biorouter's Smart approval runs it without asking.
+
+## Targets
+
+| Target | Base URL | Credential | Reads | Writes |
+| --- | --- | --- | --- | --- |
+| `shared_data` | `https://raw.githubusercontent.com/Opentrons/opentrons` | none | GET `/*/shared-data/labware/**`, GET `/*/shared-data/pipette/**`, GET `/*/shared-data/deck/**`, GET `/*/shared-data/module/**`, GET `/*/shared-data/liquid-class/**` | none |
+| `github` | `https://api.github.com` | none | GET `/repos/Opentrons/opentrons/contents/shared-data/**` | none |
+
+## Settings
+
+| Variable | Required | Secret | Purpose |
+| --- | --- | --- | --- |
+| `OPENTRONS_LOG_LEVEL` | no | no | Logging level |
+
+## How it protects your credentials
+
+- Each credential is attached only to requests for its own target's host. A full URL
+  that names another host, a path starting with `//`, plain `http` and a redirect to
+  another host are all refused, so a prompt that names a URL cannot move a key off
+  the service it belongs to.
+- Reads use `GET`, or `POST` on the routes declared as reads. Writes go through a
+  separate tool that Biorouter asks you to approve every time, and only to declared
+  routes.
+- The extension never runs a local command. Use Biorouter's Developer shell for that.
+- Credential values never appear in tool results, error messages or logs.
+
+## Develop and release
+
+```bash
+uv sync
+uv run python -m unittest discover -s tests -v   # contract tests and leak suite
+uv run python scripts/build_brxt.py               # writes dist/opentronsagent.brxt and SHA256SUMS
+uv run python scripts/version.py X.Y.Z            # moves every version string together
+```
+
+Push a tag `vX.Y.Z` equal to the manifest version to publish a release. The release
+workflow refuses any other tag. Do not edit `src/opentronsagent/_kit/` or `tests/kit_testing/`:
+they are vendored from the kit in the Biorouter repository
+(`scripts/brxt-adapter-kit/`, documented in `docs/extensions/brxt-adapter-kit.md`).
 
 ## License
-Apache-2.0.
+
+Apache-2.0. See `LICENSE` and `NOTICE`.

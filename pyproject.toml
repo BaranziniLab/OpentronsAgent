@@ -4,16 +4,16 @@ build-backend = "hatchling.build"
 
 [project]
 name = "opentronsagent"
-version = "0.1.0"
-description = "MCP adapter for Opentrons robot/run APIs, protocol metadata review, simulation planning, and guarded local Opentrons command execution."
+version = "0.2.0"
+description = "Read Opentrons labware, pipette, deck and module definitions from Opentrons shared data. Robot calls and the local command runner are removed; no key needed."
 readme = "README.md"
 license = {text = "Apache-2.0"}
 authors = [{name = "Baranzini Lab", email = "wanjun.gu@ucsf.edu"}]
 requires-python = ">=3.11"
 dependencies = [
-    "fastmcp>=2.11.2",
-    "httpx>=0.28.1",
-    "pydantic>=2.11.7",
+    "fastmcp>=4.0,<5",
+    "httpx>=0.28.1,<1",
+    "pydantic>=2.11.7,<3",
 ]
 
 [project.scripts]
@@ -23,6 +23,7 @@ opentronsagent = "opentronsagent.cli:main"
 packages = ["src/opentronsagent"]
 
 [tool.uv]
+# cryptography (pulled in by fastmcp) has no Intel Mac wheels from 49 on.
 constraint-dependencies = [
     "cryptography<49; sys_platform == 'darwin' and platform_machine == 'x86_64'",
 ]

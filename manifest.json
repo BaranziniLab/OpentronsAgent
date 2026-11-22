@@ -1,40 +1,26 @@
 {
   "name": "opentronsagent",
   "display_name": "OpentronsAgent",
-  "description": "MCP adapter for Opentrons robot/run APIs, protocol metadata review, simulation planning, and guarded local Opentrons command execution.",
-  "version": "0.1.0",
+  "description": "Read Opentrons labware, pipette, deck and module definitions from Opentrons shared data. Robot calls and the local command runner are removed; no key needed.",
+  "version": "0.2.0",
   "entry_point": "opentronsagent",
   "repository": "https://github.com/BaranziniLab/OpentronsAgent",
   "license": "Apache-2.0",
-  "tools_count": 6,
+  "tools_count": 2,
   "env_vars": [
-    {
-      "key": "OPENTRONS_BASE_URL",
-      "required": false,
-      "auto_propagate": true,
-      "description": "Optional Opentrons robot or app API base URL",
-      "secret": false
-    },
-    {
-      "key": "OPENTRONS_API_TOKEN",
-      "required": false,
-      "auto_propagate": false,
-      "description": "Optional Opentrons API token",
-      "secret": true
-    },
     {
       "key": "OPENTRONS_LOG_LEVEL",
       "required": false,
       "auto_propagate": true,
+      "default": "INFO",
       "description": "Logging level",
-      "secret": false,
-      "default": "INFO"
+      "secret": false
     }
   ],
   "skills": [
     {
       "name": "opentrons-lab-automation",
-      "description": "Use OpentronsAgent for Opentrons lab automation workflows with provenance-first, guarded tool/API access."
+      "description": "How to call OpentronsAgent's tools to read Opentrons labware, pipette and deck definitions."
     }
   ]
 }

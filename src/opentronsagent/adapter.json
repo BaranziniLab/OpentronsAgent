@@ -1,0 +1,44 @@
+{
+  "kit_spec": 1,
+  "service": "opentrons",
+  "service_title": "Opentrons shared data",
+  "kind": "adapter",
+  "log_level_env": "OPENTRONS_LOG_LEVEL",
+  "instructions": "OpentronsAgent 0.2.0 reads Opentrons shared data (labware, pipette, deck and module definitions) from the Opentrons repository on GitHub: target shared_data for raw JSON files, target github for directory listings (query ref=edge or a release tag). It does not talk to a robot: the robot HTTP API is plain http on your network, which this extension does not use.",
+  "targets": [
+    {
+      "name": "shared_data",
+      "title": "Opentrons shared data on GitHub (raw files)",
+      "base_url": "https://raw.githubusercontent.com/Opentrons/opentrons",
+      "get_routes": [
+        "/*/shared-data/labware/**",
+        "/*/shared-data/pipette/**",
+        "/*/shared-data/deck/**",
+        "/*/shared-data/module/**",
+        "/*/shared-data/liquid-class/**"
+      ],
+      "max_response_bytes": 5000000,
+      "documentation": "https://github.com/Opentrons/opentrons/tree/edge/shared-data",
+      "examples": [
+        "/edge/shared-data/labware/definitions/2/corning_96_wellplate_360ul_flat/2.json"
+      ]
+    },
+    {
+      "name": "github",
+      "title": "GitHub contents API for the Opentrons repository (listings)",
+      "base_url": "https://api.github.com",
+      "get_routes": [
+        "/repos/Opentrons/opentrons/contents/shared-data/**"
+      ],
+      "headers": {
+        "Accept": "application/vnd.github+json"
+      },
+      "documentation": "https://docs.github.com/en/rest/repos/contents",
+      "examples": [
+        "/repos/Opentrons/opentrons/contents/shared-data/labware/definitions/2"
+      ]
+    }
+  ],
+  "id": "opentronsagent",
+  "display_name": "OpentronsAgent"
+}
